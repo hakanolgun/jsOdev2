@@ -1,7 +1,10 @@
 const startConf = function(){  //başlangiçta localstorage'deki itemları ekrana yazdırma
-
+    const todos = localStorage.getItem("todos");           // localStorage'deki todo itemlarını todos değişkeninde tut
+    if(!todos){                                            // eğer localde henüz hiç todo yoksa todos listesi yoksa 
+        localStorage.setItem("todos", JSON.stringify([]))           // boş bir array olarak todos listesi oluştur
+    }
 }
-
+startConf();
 
 
 
@@ -60,6 +63,13 @@ function yeniElement() {
         }
     }
 
+    const todos = JSON.parse(localStorage.getItem("todos"));    // localdeki todos listesini todos değişkenine ata ancak birazdan push metodu kullanabilmek için string olan bu veriyi parse metodu ile orijinal haline döndürüyorum
+    todos.push(valueMetni);                                     // inputa girilen metni todos listesine push et
+    localStorage.setItem("todos", JSON.stringify(todos));               // push'tan sonra tekrar string hale cevir ve yenilenmiş todos değişkeni ile localstorage i güncelle
+   
+
+
+
 }
 
 //CHECKED YAPMA, TIKLAYINCA ÜSTÜNÜ ÇİZME
@@ -72,12 +82,3 @@ listYaniUL.addEventListener(
     },
     false                                                 // ücüncü parametre useCapture, varsayılan olarak "false"tur. (event capture - event bubbling ile ilgili)
 );
-
-let localItemList = JSON.parse(localStorage.getItem("localItem"));
-if(localItemList === null){
-    listItems = []
-}else{
-    listItems = localItemList
-}
-listItems.push(inputValue);
-localStorage.setItem("localItem", JSON.stringify(listItems));
