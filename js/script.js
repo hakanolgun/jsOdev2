@@ -10,7 +10,7 @@ const localdeVarOlanItemlarıGostermek = function () {
             function newElementForLocal() {
 
                 let yeniLi = document.createElement("li");                  // yeni bir li oluştur
-                let inputValue = todos[i].text;                                  // yazılan değeri string olarak inputValue'da tut
+                let inputValue = todos[i].text;                             // yazılan değeri string olarak inputValue'da tut
                 let valueMetni = document.createTextNode(inputValue);       // string değeri text node yap (html'den kurtul düz metin al)
                 yeniLi.appendChild(valueMetni);                             //  girilen metni yeni li itema ekledi
 

@@ -60,6 +60,7 @@ ul li.checked::before {
 .close:hover {
   background-color: #f78501;
   color: white;
+
 }
 
 .header {
