@@ -1,83 +1,109 @@
-const startConf = function(){  //başlangiçta localstorage'deki itemları ekrana yazdırma
+const TASK_LIST = 'TASK_LIST'
 
-}
+function showList() {
+    let list = document.getElementById("list")
+    list.innerHTML = ""
+    const tasks = getTasksFromStorage()
 
-
-
-
-// liste itemlarını bir değişkene atama ??? sayfa açılınca li yokk ki nereden alıyor?? localstorage
-let listItems = document.getElementsByTagName("li");
-
-// LIST ITEM OLUŞTURMA  ?? sayfa açılınca hazir olan li'leri oluşturuyor???
-for (let i = 0; i < listItems.length; i++) {      //  her bir liste itemı için
-    let span = document.createElement("span");  //  bir span tagi oluştur
-    let carpi = document.createTextNode("x");   //  itemı kapatma buton işareti
-    span.className = "close";                   //  span'a close classı ekle
-    span.appendChild(carpi);                    //  span içine carpiyi ekle
-    listItems[i].appendChild(span);             //  her item'a span'i ekle
-}
-
-// class'ı close olan itemları close değişkeninde tut
-let close = document.getElementsByClassName("close");
-
-//CLOSE/ÇARPI'YA TIKLAYINCA ITEM KAYBOLSUN - zaten var olan itemlar için
-for (let i = 0; i < close.length; i++) {          // class'ı "close" olan her item için
-    close[i].onclick = function () {            // close'a tıklanınca
-        let div = this.parentElement;           // div değişkeni close'u kapsayan elementi yani spani kapsayan "li" elementini temsil edecek
-        div.style.display = "none";             // div'in css display özelliği none olsun yani ekrandan kaybolsun
-    }
-}
-
-//TUM LİSTEYİ, YANİ UL TAGINI SEÇTİK
-const listYaniUL = document.getElementById("list");
-
-
-//YENİ ELEMENT EKLEME
-function yeniElement() {
-    let yeniLi = document.createElement("li");                  // yeni bir li oluştur
-    let inputValue = document.getElementById("task").value;     // yazılan değeri string olarak inputValue'da tut
-    let valueMetni = document.createTextNode(inputValue);       // string değeri text node yap (html'den kurtul düz metin al)
-    yeniLi.appendChild(valueMetni);                             //  girilen metni yeni li itema ekledi
-    if (inputValue === "" || inputValue.replace(/^\s+|\s+$/g, "").length == 0) { // eğer değer girilmeden ekleye tıklanmışsa veya değer trim yapıldıktan sonra boş string kalıyorsa
-        $(".error").toast("show");                              // bootstrap hata toast'ı çalışsın
-    } else {
-        $(".success").toast("show");                            // bootstrap başarıyla eklediniz toast'ı çalışsın
-        listYaniUL.appendChild(yeniLi);                         // ul içine yeni list item'ı eklensin
-    }
-    document.getElementById("task").value = "";                 // input alanı temizlensin tekrar boş olsun
-
-    let span = document.createElement("span");                  // yeni span tagi oluştur
-    let carpi = document.createTextNode("x");                   // çarpı işaret oluştur
-    span.className = "close";                                   // span'a "close" classı ekle
-    span.appendChild(carpi);                                    // span'a carpi ekle
-    yeniLi.appendChild(span);                                   // span'ı li'ye ekle
-
-    //CLOSE/ÇARPI'YA TIKLAYINCA ITEM KAYBOLSUN - yeni eklenenler için
-    for (let i = 0; i < close.length; i++) {          // class'ı "close" olan her item için
-        close[i].onclick = function () {            // close'a tıklanınca
-            let div = this.parentElement;           // div değişkeni close'u kapsayan elementi yani spani kapsayan "li" elementini temsil edecek
-            div.style.display = "none";             // div'in css display özelliği none olsun yani ekrandan kaybolsun
+    for(let i = 0; i < tasks.length; i++) {
+        const liItem = createLi();
+        liItem.innerText = tasks[i].value;
+        if(tasks[i].checked) {
+            liItem.classList.add("checked")
         }
+        const span = createSpan()
+        liItem.appendChild(span);
+        liItem.id = tasks[i].id;
+        list.appendChild(liItem);
+    }
+}
+
+function newElement() {
+    const tasks = getTasksFromStorage()
+    const inputVal = getInputVal()
+
+    if(inputVal) {
+        const id = genUniqueId()
+        let list = document.getElementById("list")
+        const liItem = createLi();
+        liItem.innerText = inputVal;
+        const span = createSpan()
+        liItem.appendChild(span);
+        liItem.id = id
+        list.appendChild(liItem);
+        tasks.push({
+            id,
+            value: inputVal,
+            checked: false
+        })
+        window.localStorage.setItem(TASK_LIST, JSON.stringify(tasks))
+        showList();
+    }
+}
+
+function genUniqueId() {
+    return 'id' + (new Date()).getTime();
+}
+
+function getInputVal() {
+    const inputValue = document.getElementById("task").value;
+    if (inputValue === "" || inputValue.replace(/^\s+|\s+$/g, "").length == 0) {
+        $(".error").toast("show");
+        return null;
+    }
+    $(".success").toast("show");
+    return inputValue;
+}
+
+function getTasksFromStorage() {
+    return JSON.parse(window.localStorage.getItem(TASK_LIST)) || []
+}
+
+function deleteTaskFromStorage(taskId) {
+    const tasks = getTasksFromStorage(TASK_LIST);
+    const filteredTasks = tasks.filter(i => i.id !== taskId)
+    window.localStorage.setItem(TASK_LIST, JSON.stringify(filteredTasks))
+}
+
+function toggleTaskCheckedValue(taskId) {
+    const tasks = getTasksFromStorage(TASK_LIST);
+    let [founded] = tasks.filter(i => i.id === taskId)
+
+    if(founded) {
+        founded.checked = !founded.checked
     }
 
-}
-
-//CHECKED YAPMA, TIKLAYINCA ÜSTÜNÜ ÇİZME
-listYaniUL.addEventListener(
-    "click",
-    function (event) {
-        if (event.target.tagName === "LI") {               // eğer tıklanan şey "li" ise
-            event.target.classList.toggle("checked");        // eğer "li"nin classlari içinde "checked" varsa kaldırır yoksa ekler (toggle methodu)
+    const newTasks = tasks.map(task => {
+        if(task.id === taskId) {
+            return founded
         }
-    },
-    false                                                 // ücüncü parametre useCapture, varsayılan olarak "false"tur. (event capture - event bubbling ile ilgili)
-);
+        return task
+    })
 
-let localItemList = JSON.parse(localStorage.getItem("localItem"));
-if(localItemList === null){
-    listItems = []
-}else{
-    listItems = localItemList
+    window.localStorage.setItem(TASK_LIST, JSON.stringify(newTasks))
 }
-listItems.push(inputValue);
-localStorage.setItem("localItem", JSON.stringify(listItems));
+
+function createSpan() {
+    let span = document.createElement("span");
+    span.addEventListener("click", () => {
+        deleteTaskFromStorage(span.parentElement.id)
+        showList();
+        span.parentElement.removeEventListener("click", () => {})
+        span.parentElement.remove()
+    })
+    let txt = document.createTextNode("x");
+    span.className = "close";
+    span.appendChild(txt);
+    return span;
+}
+
+function createLi() {
+    const liItem = document.createElement("li")
+    liItem.addEventListener("click", () => {
+        liItem.classList.toggle("checked")
+        toggleTaskCheckedValue(liItem.id)
+    })
+    return liItem;
+}
+
+showList();
