@@ -125,7 +125,6 @@ listYaniUL.addEventListener(
     function (event) {                                                      // addEventListener ikinci parametre çalışacak fonksiyon
         if (event.target.tagName === "LI") {                                // eğer tıklanan şey "li" ise
             event.target.classList.toggle("checked");                       // eğer "li"nin classlari içinde "checked" varsa kaldırır yoksa ekler (toggle methodu)
-            console.log(event.target.textContent);
 
             const icerikMetni = event.target.textContent;                                   // listItem'ın metnini içerikmetni olarak aldım
             const icerikMetniKesilmis = icerikMetni.slice(0, icerikMetni.length - 2);       // metnin sonunca carpi işaretleri çıktığı için onlardan kurtuldum.son iki karakteri çıkardırm
