@@ -1,4 +1,11 @@
-// liste itemlarını bir değişkene atama ??? sayfa açılınca li yokk ki nereden alıyor??
+const startConf = function(){  //başlangiçta localstorage'deki itemları ekrana yazdırma
+
+}
+
+
+
+
+// liste itemlarını bir değişkene atama ??? sayfa açılınca li yokk ki nereden alıyor?? localstorage
 let listItems = document.getElementsByTagName("li");
 
 // LIST ITEM OLUŞTURMA  ?? sayfa açılınca hazir olan li'leri oluşturuyor???
