@@ -1,10 +1,8 @@
-const listYaniUL = document.getElementById("list");                         //TUM ITEMLARI KAPSAYACAK OLAN LİSTE, YANİ UL TAGINI SEÇTİK
+const listYaniUL = document.getElementById("list");                         //TUM ITEMLARI KAPSAYACAK UL TAGINI SEÇTİK
 
-
-
-// LOCALSTORAGE'DE VAR OLAN ITEMLARI SAYFA YENİLEYİNCE OLUŞTURMA FONKSİYONU
+// LOCALSTORAGE'DE VAR OLAN ITEMLARI SAYFA YENİLENİNCE OLUŞTURMA FONKSİYONU
 const localdeVarOlanItemlarıGostermek = function () {
-    const todos = JSON.parse(localStorage.getItem("todos"));                // localStorage'deki todo itemlarını todos değişkeninde tut array olarak(parse metodu ile) yoksa string olur.
+    const todos = JSON.parse(localStorage.getItem("todos"));                // localStorage'deki itemları todos değişkeninde tut array olarak(parse metodu) yoksa string olur.
     if (!todos) {                                                           // eğer localde henüz hiç todo yoksa todos listesi yoksa 
         localStorage.setItem("todos", JSON.stringify([]))                   // boş bir array olarak todos listesi oluştur
     } else {
@@ -56,16 +54,16 @@ let close = document.getElementsByClassName("close");
 // CLOSE'A TIKLAYINCA ITEM KAYBOLSUN - zaten var olan itemlar için
 for (let i = 0; i < close.length; i++) {                                            // class'ı "close" olan her item için
     close[i].onclick = function () {                                                // close'a tıklanınca
-        let div = this.parentElement;                                               // div değişkeni close'u kapsayan elementi yani spani kapsayan "li" elementini temsil edecek
+        let div = this.parentElement;                                               // div değişkeni close'u kapsayan elementi yani "li" elementini temsil edecek
         div.style.display = "none";                                                 // div'in css display özelliği none olsun yani ekrandan kaybolsun
 
         //ITEM'I LOCALSTOREGE'DEN DE SİLMEK (item'in metnini alıp localde aratıp eşleşenleri sileceğiz)
         const icerikMetni = div.textContent;                                        // listItem'ın metnini içerikmetni olarak aldım
-        const icerikMetniKesilmis = icerikMetni.slice(0, icerikMetni.length - 2);   // metnin sonunca carpi işaretleri çıktığı için onlardan kurtuldum.son iki karakteri çıkardırm
+        const icerikMetniKesilmis = icerikMetni.slice(0, icerikMetni.length - 2);   // metnin sonunda carpi işaretleri de çıktığı için onlardan kurtuldum.
 
         let todos = JSON.parse(localStorage.getItem("todos"));                      // todos listesini array olarak aldım.
-        todos = todos.filter(item => item.text != icerikMetniKesilmis);                  // filtre metodu ile kapatılan elemanın metni ile eşleşen localstorage deki elemanı çıkardım
-        localStorage.setItem("todos", JSON.stringify(todos))                        // güncellenmeiş yeni todos listi localstorage gonderdim
+        todos = todos.filter(item => item.text != icerikMetniKesilmis);             // filtre metodu ile kapatılan elemanın metni ile eşleşen localstorage deki elemanı çıkardım
+        localStorage.setItem("todos", JSON.stringify(todos))                        // güncellenmiş yeni todos listi localstorage gonderdim
     }
 }
 
@@ -77,7 +75,7 @@ function yeniElement() {
     let yeniLi = document.createElement("li");                                      // yeni bir li oluştur
     let inputValue = document.getElementById("task").value;                         // yazılan değeri string olarak inputValue'da tut
     let valueMetni = document.createTextNode(inputValue);                           // string değeri text node yap (html'den kurtul düz metin al)
-    yeniLi.appendChild(valueMetni);                                                 //  girilen metni yeni li itema ekledi
+    yeniLi.appendChild(valueMetni);                                                 // girilen metni yeni li itema ekledi
     if (inputValue === "" || inputValue.replace(/^\s+|\s+$/g, "").length == 0) {    // eğer değer girilmeden ekleye tıklanmışsa veya değer trim yapıldıktan sonra boş string kalıyorsa
         $(".error").toast("show");                                                  // bootstrap hata toast'ı çalışsın
     } else {
