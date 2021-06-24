@@ -100,7 +100,7 @@ function yeniElement() {
 
     const todo = {
         text: inputValue,
-        isChecked: true
+        isChecked: false
     }
     // YENİ EKLENEN İTEM'I LOCALSTORAGE'E EKLEME
     const todos = JSON.parse(localStorage.getItem("todos"));                        // localdeki todos listesini todos değişkenine ata ancak birazdan push metodu kullanabilmek için string olan bu veriyi parse metodu ile orijinal haline döndürüyorum
