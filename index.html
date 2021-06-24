@@ -70,15 +70,19 @@
           alt=""
         />
         <h2>Yapılacaklar Listesi</h2>
-        <input type="text" id="task" placeholder="Bugün ne yapacaksın?" />
+        <input
+          type="text"
+          id="task"
+          placeholder="Bugün ne yapacaksın?"
+          onkeypress="return
+        enterKeyPressed(event)"
+        />
         <span onclick="yeniElement()" id="liveToastBtn" class="button"
           >Ekle</span
         >
       </div>
 
-      <ul id="list">
- 
-      </ul>
+      <ul id="list"></ul>
       <script
         src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
