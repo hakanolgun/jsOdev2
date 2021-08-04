@@ -1,3 +1,3 @@
 # To Do List with LocalStorage
 
-Patika.dev front-end patikası javascript dersi ödev no 2.
+js dosyasındaki tüm kodların yanlarına açıklamalar yazıldı, bu sayede yeni öğrenen arkadaşlar daha rahat inceleyebilirler.
